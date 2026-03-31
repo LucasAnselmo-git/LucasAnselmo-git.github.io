@@ -1,0 +1,407 @@
+:root {
+  /* Color Palette */
+  --surface: #131313;
+  --surface-container-low: #1b1b1b;
+  --surface-container-high: #2a2a2a;
+  --surface-container-highest: #353535;
+  --surface-container-lowest: #0e0e0e;
+
+  --primary: #eaffde;
+  --primary-container: #00ff00;
+  --on-primary: #013a00;
+  --surface-tint: #02e600;
+  --on-surface: #e2e2e2;
+  --outline-variant: rgba(59, 75, 53, 0.2);
+
+  /* Typography */
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "Fira Code", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--surface);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* The Signature Texture */
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.1) 50%
+  );
+  background-size: 100% 4px; /* 2px repeating gradient */
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Asymmetrical Layout & Margins */
+.archive-container {
+  width: 100%;
+  max-width: 900px;
+  padding: 40px;
+  margin-left: -5%; /* Intentional asymmetry */
+}
+
+/* The Terminal Frame (The Hero) */
+#terminal-frame {
+  background: linear-gradient(
+      180deg,
+      rgba(234, 255, 222, 0.05) 0%,
+      transparent 100%
+    ),
+    var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  border-radius: 0px; /* Strict No-Round Rule */
+  box-shadow: 0 0 30px rgba(2, 230, 0, 0.05); /* Ambient Glow */
+  backdrop-filter: blur(15px);
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  /* Minimize Animation */
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+  position: relative;
+  z-index: 10;
+}
+
+/* This class gets added by JavaScript when minimized */
+#terminal-frame.minimized {
+  transform: translateY(60px) scale(0.9);
+  opacity: 0;
+  pointer-events: none; /* Prevents clicking the invisible terminal */
+}
+
+/* --- Linux Style Header --- */
+.terminal-header {
+  background-color: var(--surface-container-highest);
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.header-title {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--on-surface);
+  opacity: 0.6;
+}
+
+.window-controls {
+  display: flex;
+  gap: 16px;
+}
+
+.control-icon {
+  font-family: var(--font-body);
+  color: var(--on-surface);
+  opacity: 0.5;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: opacity 0.2s;
+}
+
+.control-icon:hover {
+  opacity: 1;
+}
+.control-icon:last-child:hover {
+  color: #ffb4ab;
+}
+
+.terminal-body {
+  padding: 0;
+  overflow: hidden;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#output {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 32px 32px 0 32px;
+}
+
+/* Custom Scrollbar for the output area */
+#output::-webkit-scrollbar {
+  width: 8px;
+}
+#output::-webkit-scrollbar-track {
+  background: transparent;
+}
+#output::-webkit-scrollbar-thumb {
+  background: var(--surface-container-highest);
+}
+
+/* Typography Hierarchy */
+h1.display-lg {
+  font-family: var(--font-display);
+  color: var(--primary-container);
+  font-size: 2.5rem;
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
+  margin: 0 0 16px 0;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+h2.headline-sm {
+  font-family: var(--font-display);
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--on-surface);
+  margin-top: 0;
+}
+
+.code,
+.label,
+.command-echo {
+  font-family: var(--font-mono);
+  color: var(--primary);
+}
+
+.command-echo {
+  margin-top: 24px;
+  margin-bottom: 12px;
+  opacity: 0.7;
+}
+
+/* Directory List Styling with Hover Effect */
+.directory-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.directory-item {
+  padding: 8px 12px;
+  margin-bottom: 4px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.directory-item:hover {
+  background-color: var(--surface-container-high);
+}
+
+.directory-item .code {
+  display: inline-block;
+  width: 120px;
+}
+
+/* --- Input Area & Cursor Fix --- */
+#input-line {
+  display: flex;
+  align-items: center;
+  background-color: var(--surface-container-lowest);
+  padding: 16px;
+  margin: 24px 32px 32px 32px;
+  border: 1px solid var(--outline-variant);
+  transition: box-shadow 0.3s ease;
+  flex-shrink: 0;
+}
+
+#input-line:focus-within {
+  box-shadow: 0 0 15px rgba(2, 230, 0, 0.1);
+}
+
+.prompt {
+  font-family: var(--font-mono);
+  color: var(--primary-container);
+  margin-right: 16px;
+  font-weight: 600;
+}
+
+.input-wrapper {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+#cmd-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: transparent;
+  caret-color: transparent;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  z-index: 2;
+}
+
+#typed-text {
+  font-family: var(--font-mono);
+  color: var(--primary);
+  font-size: 1rem;
+  white-space: pre;
+}
+
+.blinking-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.2rem;
+  background-color: var(--primary);
+  animation: blink 800ms step-end infinite;
+  vertical-align: middle;
+  margin-bottom: 2px;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-container-highest);
+}
+
+/* --- Clickable Link Styling --- */
+a {
+  color: var(--primary-container);
+  text-decoration: none;
+  border-bottom: 1px solid var(--outline-variant);
+  transition: border-color 0.2s ease, text-shadow 0.2s ease;
+  padding-bottom: 2px;
+}
+
+a:hover {
+  border-bottom-color: var(--primary-container);
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
+}
+
+/* --- The Arch Meme Background --- */
+#arch-meme {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 0;
+  cursor: pointer;
+}
+
+#arch-meme h1 {
+  color: var(--on-surface);
+  opacity: 0.15;
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+
+#arch-meme p {
+  color: var(--primary);
+  opacity: 0.5;
+}
+
+/* ==========================================================
+   MOBILE RESPONSIVE
+   ========================================================== */
+@media (max-width: 768px) {
+  .archive-container {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  #terminal-frame {
+    height: 85vh;
+  }
+
+  h1.display-lg {
+    font-size: 1.5rem;
+  }
+
+  h2.headline-sm {
+    font-size: 1.2rem;
+  }
+
+  #output {
+    padding: 16px 16px 0 16px;
+  }
+
+  #input-line {
+    margin: 16px;
+    padding: 12px;
+  }
+
+  #arch-meme h1 {
+    font-size: 2rem;
+  }
+
+  .directory-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .directory-item .code {
+    width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  h1.display-lg {
+    font-size: 1.2rem;
+  }
+
+  .terminal-header {
+    padding: 6px 12px;
+  }
+
+  .header-title {
+    font-size: 0.75rem;
+  }
+
+  #output {
+    padding: 12px 12px 0 12px;
+  }
+
+  #input-line {
+    margin: 12px;
+    padding: 10px;
+  }
+}

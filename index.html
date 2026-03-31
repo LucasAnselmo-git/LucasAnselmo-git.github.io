@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com;"
+    />
+    <title>Digital Archive Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="scanlines"></div>
+
+    <main class="archive-container">
+      <div id="arch-meme">
+        <h1 class="display-lg">I use Arch btw.</h1>
+        <p class="code">> Click anywhere to restore session...</p>
+      </div>
+
+      <div id="terminal-frame">
+        <div class="terminal-header">
+          <span class="header-title">guest@archive:~</span>
+          <div class="window-controls">
+            <span class="control-icon" id="minimize-btn" role="button" aria-label="Minimize terminal">_</span>
+            <span class="control-icon" role="button" aria-label="Maximize terminal">□</span>
+            <span class="control-icon" role="button" aria-label="Close terminal">×</span>
+          </div>
+        </div>
+
+        <div class="terminal-body" id="terminal" role="log" aria-live="polite" aria-label="Terminal output">
+          <div id="output"></div>
+
+          <div id="input-line">
+            <span class="prompt">$</span>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                maxlength="20"
+                id="cmd-input"
+                autofocus
+                autocomplete="off"
+                spellcheck="false"
+                aria-label="Terminal command input"
+              />
+              <span id="typed-text"></span><span class="blinking-cursor"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
