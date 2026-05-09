@@ -13,6 +13,13 @@ const PORTFOLIO_DATA = {
       desc: "A DNS filtering server using a RaspberryPi",
       link: "https://github.com/LucasAnselmo-git/Cybersecurity/tree/main/PiHole",
     },
+    {
+      id: "02",
+      name: "Net-watcher",
+      cmd: "netwatcher",
+      desc: "An ARP and DNS dashboard using Pi-hole",
+      link: "https://github.com/LucasAnselmo-git/Cybersecurity/tree/main/net-watcher",
+    },
   ],
 
   contacts: [
