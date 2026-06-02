@@ -26,8 +26,8 @@ const PORTFOLIO_DATA = {
     {
       id: "EMAIL",
       cmd: "email",
-      display: "luc_anselmo@hotmail.com",
-      url: "mailto:luc_anselmo@hotmail.com",
+      display: "lucas_anselmo@tutamail.com",
+      url: "mailto:lucas_anselmo@tutamail.com",
       msg: "Opening local mail client protocol...",
     },
     {
@@ -227,34 +227,34 @@ function buildContactsHTML() {
 // Extracted Easter Egg Logic
 function executeSudo() {
   printHTMLToTerminal(
-    `<p style="color: #ffb4ab; margin-top: 16px;">[!] SECURITY ALERT: ELEVATED PRIVILEGES REQUESTED [!]</p>`
+    `<p style="color: #ffb4ab; margin-top: 16px;">[!] SECURITY ALERT: ELEVATED PRIVILEGES REQUESTED [!]</p>`,
   );
   inputField.disabled = true;
 
   setTimeout(
     () =>
       printHTMLToTerminal(
-        `<span class="code">> Initiating privilege escalation...</span>`
+        `<span class="code">> Initiating privilege escalation...</span>`,
       ),
-    800
+    800,
   );
   setTimeout(
     () =>
       printHTMLToTerminal(
-        `<span class="code">> Bypassing mainframe security protocols...</span>`
+        `<span class="code">> Bypassing mainframe security protocols...</span>`,
       ),
-    1800
+    1800,
   );
   setTimeout(
     () =>
       printHTMLToTerminal(
-        `<span class="code">> Extracting shadow file hashes...</span>`
+        `<span class="code">> Extracting shadow file hashes...</span>`,
       ),
-    2800
+    2800,
   );
   setTimeout(() => {
     printHTMLToTerminal(
-      `<p style="color: #ffb4ab; margin-top: 16px; font-weight: bold;">FATAL ERROR: UNAUTHORIZED USER.</p><p style="color: #ffb4ab;">This incident has been logged and reported to the system administrator.</p>`
+      `<p style="color: #ffb4ab; margin-top: 16px; font-weight: bold;">FATAL ERROR: UNAUTHORIZED USER.</p><p style="color: #ffb4ab;">This incident has been logged and reported to the system administrator.</p>`,
     );
     inputField.disabled = false;
     inputField.focus();
@@ -296,7 +296,7 @@ function processCommand(cmd) {
   const projectMatch = PORTFOLIO_DATA.projects.find((p) => p.cmd === cmd);
   if (projectMatch) {
     printHTMLToTerminal(
-      `<p style="color: var(--primary-container); margin-top: 16px;">Accessing ${sanitizeHTML(projectMatch.name)} repository... opening in new tab.</p>`
+      `<p style="color: var(--primary-container); margin-top: 16px;">Accessing ${sanitizeHTML(projectMatch.name)} repository... opening in new tab.</p>`,
     );
     safeOpenURL(projectMatch.link);
     return;
@@ -306,7 +306,7 @@ function processCommand(cmd) {
   const contactMatch = PORTFOLIO_DATA.contacts.find((c) => c.cmd === cmd);
   if (contactMatch) {
     printHTMLToTerminal(
-      `<p style="color: var(--primary-container); margin-top: 16px;">${sanitizeHTML(contactMatch.msg)}</p>`
+      `<p style="color: var(--primary-container); margin-top: 16px;">${sanitizeHTML(contactMatch.msg)}</p>`,
     );
     safeOpenURL(contactMatch.url);
     return;
@@ -324,6 +324,6 @@ function processCommand(cmd) {
   // 4. Fallback: Command not recognized
   const safeCmdForError = sanitizeHTML(cmd);
   printHTMLToTerminal(
-    `<p style="color: #ffb4ab; margin-top: 16px;">ERR: Command not recognized: <span class="code">${safeCmdForError}</span></p>`
+    `<p style="color: #ffb4ab; margin-top: 16px;">ERR: Command not recognized: <span class="code">${safeCmdForError}</span></p>`,
   );
 }
